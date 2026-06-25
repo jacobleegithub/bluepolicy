@@ -13,6 +13,8 @@
  */
 
 const DEFAULT_ALLOW = [
+  "https://bluepolicy.eponym.online",
+  "http://bluepolicy.eponym.online",
   "https://jacobleegithub.github.io",
   "http://localhost:8080",
   "http://127.0.0.1:8080",
