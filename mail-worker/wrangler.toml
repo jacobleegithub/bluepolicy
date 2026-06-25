@@ -10,5 +10,10 @@ MAIL_FROM = "陳情書系統 <no-reply@dev.eponym.online>"
 # 允許的前端來源（逗號分隔）。預設已含 GitHub Pages 與本機
 ALLOW_ORIGINS = "https://bluepolicy.eponym.online,http://bluepolicy.eponym.online,https://jacobleegithub.github.io,http://localhost:8080,http://127.0.0.1:8080"
 
+# 統計用 KV（只存彙總數字：總份數與各縣市計數，無個資）
+[[kv_namespaces]]
+binding = "STATS"
+id = "512c2a9d1d7c4b23a0c1346c43652795"
+
 # 注意：RESEND_API_KEY 為機密，請勿寫在此檔。
 # 部署時以指令設定：  wrangler secret put RESEND_API_KEY

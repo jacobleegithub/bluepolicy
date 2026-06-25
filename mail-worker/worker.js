@@ -23,6 +23,15 @@ const DEFAULT_ALLOW = [
 const DEFAULT_TO = "AR6185@ntpc.gov.tw";
 const DEFAULT_FROM = "陳情書系統 <onboarding@resend.dev>";
 
+// 台灣 22 縣市白名單；只接受清單內的值寫入統計，避免任意字串污染 KV
+const ALLOWED_CITIES = [
+  "臺北市", "新北市", "基隆市", "桃園市", "新竹市", "新竹縣", "苗栗縣",
+  "臺中市", "彰化縣", "南投縣", "雲林縣", "嘉義市", "嘉義縣", "臺南市",
+  "高雄市", "屏東縣", "宜蘭縣", "花蓮縣", "臺東縣", "澎湖縣", "金門縣", "連江縣",
+];
+
+const STATS_KEY = "agg";
+
 export default {
   async fetch(request, env) {
     const allow = (env.ALLOW_ORIGINS
@@ -33,6 +42,10 @@ export default {
 
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: cors });
+    }
+    // 統計查詢：GET 回傳彙總（總份數與各縣市計數），供統計頁讀取
+    if (request.method === "GET") {
+      return json(await readStats(env), 200, cors);
     }
     if (request.method !== "POST") {
       return json({ error: "Method not allowed" }, 405, cors);
@@ -53,6 +66,7 @@ export default {
     const subject = (data.subject || "陳情書意見陳述").toString().slice(0, 300);
     const html = (data.html || "").toString();
     const text = (data.text || "").toString();
+    const city = normalizeCity(data.city); // 統計用，僅接受縣市白名單
 
     if (!name) return json({ error: "缺少陳情人姓名" }, 400, cors);
     if (!html && !text) return json({ error: "缺少陳情書內容" }, 400, cors);
@@ -98,9 +112,41 @@ export default {
 
     let id = null;
     try { id = JSON.parse(bodyText).id; } catch { /* ignore */ }
+
+    // 寄送成功才計入統計（只存彙總，不存個資）；統計失敗不影響寄信結果
+    await recordStats(env, city);
+
     return json({ ok: true, id }, 200, cors);
   },
 };
+
+// 縣市消毒：trim 後僅接受白名單內的值，否則回 null（不計入縣市分布）
+function normalizeCity(raw) {
+  const c = (raw || "").toString().trim();
+  return ALLOWED_CITIES.includes(c) ? c : null;
+}
+
+// 讀取彙總統計；KV 不存在或解析失敗時回空結構
+async function readStats(env) {
+  if (!env.STATS) return { total: 0, byCity: {} };
+  try {
+    const raw = await env.STATS.get(STATS_KEY);
+    const agg = raw ? JSON.parse(raw) : null;
+    if (agg && typeof agg.total === "number" && agg.byCity) return agg;
+  } catch { /* fall through */ }
+  return { total: 0, byCity: {} };
+}
+
+// 累加統計：總份數 +1，若有有效縣市則該縣市 +1（read-modify-write）
+async function recordStats(env, city) {
+  if (!env.STATS) return;
+  try {
+    const agg = await readStats(env);
+    agg.total += 1;
+    if (city) agg.byCity[city] = (agg.byCity[city] || 0) + 1;
+    await env.STATS.put(STATS_KEY, JSON.stringify(agg));
+  } catch { /* 統計失敗不影響寄信 */ }
+}
 
 /**
  * 以陳情人姓名作為 From 的顯示名稱，地址沿用已驗證網域（Resend 規範：From 網域必須已驗證，

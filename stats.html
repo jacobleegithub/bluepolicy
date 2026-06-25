@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>陳情統計 · 藍色海洋政策陳情書</title>
+<meta name="description" content="藍色海洋政策陳情書 — 陳情送出份數與各縣市分布統計">
+<style>
+  :root{
+    --ink:#1a2733; --muted:#5b6b7a; --line:#cfd9e2; --accent:#0aa4c2;
+    --blue:#0b4f8a; --bg:#f4f8fb; --card:#fff;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:'PingFang TC','Microsoft JhengHei','Noto Sans TC',sans-serif;
+    color:var(--ink); background:var(--bg); line-height:1.7;
+  }
+  .wrap{max-width:760px; margin:0 auto; padding:28px 18px 64px;}
+  header h1{font-size:24px; margin:0 0 4px; letter-spacing:.04em;}
+  header p{color:var(--muted); margin:0 0 22px; font-size:14px;}
+  .total-card{
+    background:linear-gradient(135deg,var(--blue),var(--accent)); color:#fff;
+    border-radius:14px; padding:24px 26px; margin-bottom:24px;
+    display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;
+  }
+  .total-card .num{font-size:46px; font-weight:800; line-height:1;}
+  .total-card .lbl{font-size:15px; opacity:.92;}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:20px 22px;}
+  .card h2{font-size:17px; margin:0 0 16px; color:var(--blue);}
+  .bar-row{display:grid; grid-template-columns:64px 1fr 48px; align-items:center; gap:10px; margin:8px 0;}
+  .bar-row .name{font-size:14px; color:var(--ink); white-space:nowrap;}
+  .bar-track{background:#eef3f7; border-radius:6px; height:22px; overflow:hidden;}
+  .bar-fill{height:100%; background:linear-gradient(90deg,var(--accent),var(--blue)); border-radius:6px; min-width:2px; transition:width .5s ease;}
+  .bar-row .cnt{font-size:14px; font-weight:600; text-align:right; color:var(--muted);}
+  .muted{color:var(--muted); font-size:13px;}
+  .toolbar{display:flex; gap:12px; align-items:center; margin-top:20px; flex-wrap:wrap;}
+  button{
+    font-family:inherit; font-size:14px; cursor:pointer; border:1px solid var(--line);
+    background:#fff; color:var(--blue); padding:8px 16px; border-radius:8px;
+  }
+  button:hover{background:#eef6fb;}
+  a.back{color:var(--accent); text-decoration:none; font-size:14px;}
+  a.back:hover{text-decoration:underline;}
+  .state{padding:24px 4px; color:var(--muted);}
+  .state.err{color:#b3261e;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>陳情統計</h1>
+    <p>關於「新北市貢寮、萬里、瑞芳水產動植物繁殖保育區及有關限制事項」公告草案之意見陳述</p>
+  </header>
+
+  <div class="total-card">
+    <span class="num" id="total">—</span>
+    <span class="lbl">份陳情書已送出</span>
+  </div>
+
+  <div class="card">
+    <h2>各縣市分布</h2>
+    <div id="chart"><div class="state" id="chartState">載入中…</div></div>
+    <p class="muted" id="note" style="margin-top:14px;"></p>
+  </div>
+
+  <div class="toolbar">
+    <button id="refresh">重新整理</button>
+    <a class="back" href="./index.html">← 回到陳情書</a>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  // 與陳情書相同的 Worker 端點；GET 回傳彙總統計
+  var STATS_ENDPOINT = "https://bluepolicy-mail.jacoblee-0d0.workers.dev";
+
+  var totalEl = document.getElementById("total");
+  var chartEl = document.getElementById("chart");
+  var stateEl = document.getElementById("chartState");
+  var noteEl  = document.getElementById("note");
+
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]; }); }
+
+  function render(data){
+    var total = (data && typeof data.total === "number") ? data.total : 0;
+    var byCity = (data && data.byCity) ? data.byCity : {};
+    totalEl.textContent = total.toLocaleString("zh-Hant");
+
+    var rows = Object.keys(byCity)
+      .map(function(k){ return { name:k, count:byCity[k] }; })
+      .filter(function(r){ return r.count > 0; })
+      .sort(function(a,b){ return b.count - a.count; });
+
+    if (!rows.length){
+      chartEl.innerHTML = '<div class="state">目前尚無縣市資料。</div>';
+      noteEl.textContent = "";
+      return;
+    }
+    var max = rows[0].count;
+    var html = rows.map(function(r){
+      var pct = Math.max(2, Math.round(r.count / max * 100));
+      return '<div class="bar-row">'
+        + '<span class="name">' + esc(r.name) + '</span>'
+        + '<span class="bar-track"><span class="bar-fill" style="width:' + pct + '%"></span></span>'
+        + '<span class="cnt">' + r.count + '</span>'
+        + '</div>';
+    }).join("");
+    chartEl.innerHTML = html;
+
+    var sum = rows.reduce(function(a,r){ return a + r.count; }, 0);
+    noteEl.textContent = "已填縣市合計 " + sum + " 份"
+      + (total > sum ? "（另有 " + (total - sum) + " 份未填縣市）" : "") + "。";
+  }
+
+  function load(){
+    stateEl.textContent = "載入中…";
+    stateEl.className = "state";
+    chartEl.innerHTML = "";
+    chartEl.appendChild(stateEl);
+    fetch(STATS_ENDPOINT, { method: "GET" })
+      .then(function(res){ if (!res.ok) throw new Error("HTTP " + res.status); return res.json(); })
+      .then(render)
+      .catch(function(err){
+        chartEl.innerHTML = "";
+        stateEl.textContent = "讀取統計失敗：" + (err && err.message ? err.message : "網路錯誤");
+        stateEl.className = "state err";
+        chartEl.appendChild(stateEl);
+        totalEl.textContent = "—";
+      });
+  }
+
+  document.getElementById("refresh").addEventListener("click", load);
+  load();
+})();
+</script>
+</body>
+</html>

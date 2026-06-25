@@ -110,6 +110,7 @@
   }
   .field:focus{outline:none;border-bottom-color:var(--accent);background:#f4fbfd;}
   textarea.field{resize:vertical;min-height:42px;border:1px solid var(--line);border-radius:6px;}
+  select.field{cursor:pointer;padding:6px 2px;}
   .ident{display:flex;flex-wrap:wrap;gap:8px 18px;padding:4px 0;}
   .chk{display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none;font-size:15.5px;}
   .chk input{position:absolute;opacity:0;width:0;height:0;}
@@ -211,6 +212,19 @@
         <tr><th>聯絡電話</th><td><input class="field" type="tel" id="fPhone" autocomplete="tel"></td></tr>
         <tr><th>電子郵件</th><td><input class="field" type="email" id="fEmail" autocomplete="email"></td></tr>
         <tr><th>通訊地址</th><td><input class="field" type="text" id="fAddr" autocomplete="street-address"></td></tr>
+        <tr><th>居住縣市</th><td>
+          <select class="field" id="fCity" autocomplete="address-level1">
+            <option value="">請選擇</option>
+            <option>臺北市</option><option>新北市</option><option>基隆市</option>
+            <option>桃園市</option><option>新竹市</option><option>新竹縣</option>
+            <option>苗栗縣</option><option>臺中市</option><option>彰化縣</option>
+            <option>南投縣</option><option>雲林縣</option><option>嘉義市</option>
+            <option>嘉義縣</option><option>臺南市</option><option>高雄市</option>
+            <option>屏東縣</option><option>宜蘭縣</option><option>花蓮縣</option>
+            <option>臺東縣</option><option>澎湖縣</option><option>金門縣</option>
+            <option>連江縣</option>
+          </select>
+        </td></tr>
         <tr><th>身　分</th><td>
           <div class="ident" id="identGroup">
             <label class="chk"><input type="checkbox" value="漁民"><span class="box"></span>漁民</label>
@@ -451,6 +465,7 @@
       "聯絡電話：" + val("fPhone"),
       "電子郵件：" + val("fEmail"),
       "通訊地址：" + val("fAddr"),
+      "居住縣市：" + val("fCity"),
       "身　分：" + (idents.length ? idents.join("、") : ""),
       "",
       "（以下為陳情書全文，HTML 版本另含完整表格內容。）",
@@ -464,13 +479,18 @@
   function buildHtml(){
     var origDoc = document.getElementById("doc");
     var clone = origDoc.cloneNode(true);
-    var origFields = origDoc.querySelectorAll("input, textarea");
-    var cloneFields = clone.querySelectorAll("input, textarea");
+    var origFields = origDoc.querySelectorAll("input, textarea, select");
+    var cloneFields = clone.querySelectorAll("input, textarea, select");
 
     Array.prototype.forEach.call(origFields, function(o, i){
       var c = cloneFields[i];
       if (!c || !c.parentNode) return;
-      if (o.type === "checkbox"){
+      if (o.tagName === "SELECT"){
+        var sp = document.createElement("span");
+        sp.textContent = o.value ? o.value : "　　　　";
+        sp.setAttribute("style", "border-bottom:1px solid #333;padding:0 4px;");
+        c.parentNode.replaceChild(sp, c);
+      } else if (o.type === "checkbox"){
         var mark = document.createElement("span");
         mark.textContent = o.checked ? "☑ " : "☐ ";
         // 移除原本靠 CSS 顯示的方框，避免信件中重複
@@ -511,10 +531,12 @@
     if (!val("fName")){ setStatus("請先填寫「陳情人姓名」。", "err"); document.getElementById("fName").focus(); return; }
     var email = val("fEmail");
     if (!email || email.indexOf("@") < 1){ setStatus("請先填寫正確的「電子郵件」（作為回信地址）。", "err"); document.getElementById("fEmail").focus(); return; }
+    if (!val("fCity")){ setStatus("請先選擇「居住縣市」。", "err"); document.getElementById("fCity").focus(); return; }
 
     var payload = {
       name: val("fName"),
       replyTo: email,
+      city: val("fCity"),
       subject: SUBJECT,
       text: buildText(),
       html: buildHtml()
