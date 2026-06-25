@@ -408,6 +408,26 @@
   var statusEl = document.getElementById("mailStatus");
   function setStatus(msg, kind){ statusEl.textContent = msg || ""; statusEl.className = "mail-status" + (kind ? " " + kind : ""); }
 
+  // ====== 自動帶入：簽名沿用上方「陳情人姓名」、日期帶入今日 ======
+  (function autofill(){
+    // 簽名欄即時沿用「陳情人姓名（代表人）」，設為唯讀避免兩處不一致
+    var fName = document.getElementById("fName");
+    var sName = document.getElementById("sName");
+    if (fName && sName){
+      sName.readOnly = true;
+      sName.placeholder = "（自動帶入上方姓名）";
+      var sync = function(){ sName.value = fName.value; };
+      fName.addEventListener("input", sync);
+      sync();
+    }
+    // 日期帶入今日（版面民國年固定為 115，即西元 2026；此處填月、日）
+    var now = new Date();
+    var mm = String(now.getMonth() + 1);
+    var dd = String(now.getDate());
+    ["sMonth", "hdrMonth"].forEach(function(id){ var el = document.getElementById(id); if (el && !el.value) el.value = mm; });
+    ["sDay", "hdrDay"].forEach(function(id){ var el = document.getElementById(id); if (el && !el.value) el.value = dd; });
+  })();
+
   // 一鍵產生 PDF：呼叫瀏覽器列印 → 另存為 PDF（中文字完整保留）
   document.getElementById("btnPdf").addEventListener("click", function(){
     window.print();
