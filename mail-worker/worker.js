@@ -95,8 +95,11 @@ export default {
       html: html || undefined,
       text: text || undefined,
     };
-    // 回信地址設為陳情人 email，方便受文機關直接回覆
-    if (replyTo && replyTo.includes("@")) payload.reply_to = replyTo;
+    // 回信地址設為陳情人 email，方便受文機關直接回覆；並 CC 一份給陳情人留存
+    if (replyTo && replyTo.includes("@")) {
+      payload.reply_to = replyTo;
+      payload.cc = [replyTo];
+    }
 
     let resp, bodyText;
     try {
