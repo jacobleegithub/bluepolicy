@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>陳情書｜新北市貢寮、萬里、瑞芳水產動植物繁殖保育區公告草案之意見陳述</title>
+<meta name="description" content="關於「新北市貢寮、萬里、瑞芳水產動植物繁殖保育區及有關限制事項」公告草案之意見陳述陳情書">
+<style>
+  :root{
+    --blue:#0b4f8a;
+    --blue-d:#073a66;
+    --blue-l:#1c6fb8;
+    --accent:#0aa4c2;
+    --ink:#1a2733;
+    --muted:#5b6b78;
+    --line:#cfd9e2;
+    --bg:#eef4f9;
+    --paper:#ffffff;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:"PingFang TC","Heiti TC","Microsoft JhengHei","Noto Sans TC",system-ui,-apple-system,sans-serif;
+    color:var(--ink);
+    background:linear-gradient(180deg,#dceaf5 0%,var(--bg) 240px,var(--bg) 100%);
+    line-height:1.85;
+    font-size:16px;
+    -webkit-text-size-adjust:100%;
+  }
+
+  /* ---------- 工具列 ---------- */
+  .toolbar{
+    position:sticky;top:0;z-index:50;
+    background:rgba(255,255,255,.92);
+    backdrop-filter:saturate(180%) blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .toolbar-inner{
+    max-width:900px;margin:0 auto;padding:10px 16px;
+    display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  }
+  .brand{font-weight:700;color:var(--blue);margin-right:auto;font-size:15px;letter-spacing:.5px;}
+  .brand span{color:var(--accent);}
+  .btn{
+    appearance:none;border:0;cursor:pointer;
+    font-family:inherit;font-size:15px;font-weight:600;
+    padding:10px 16px;border-radius:10px;
+    display:inline-flex;align-items:center;gap:7px;
+    transition:transform .08s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .btn:active{transform:translateY(1px);}
+  .btn-primary{background:linear-gradient(180deg,var(--blue-l),var(--blue));color:#fff;box-shadow:0 2px 8px rgba(11,79,138,.35);}
+  .btn-primary:hover{background:linear-gradient(180deg,#2179c4,#0a4980);}
+  .btn-ghost{background:#eaf2f9;color:var(--blue-d);border:1px solid var(--line);}
+  .btn-ghost:hover{background:#dfecf7;}
+
+  /* ---------- 文件 ---------- */
+  .doc{
+    max-width:900px;margin:22px auto 60px;background:var(--paper);
+    padding:54px 60px;border-radius:8px;
+    box-shadow:0 10px 40px rgba(13,52,89,.12);
+    border:1px solid #e3ebf2;
+  }
+  .recv{font-size:14.5px;color:var(--muted);line-height:1.9;}
+  .recv b{color:var(--ink);font-weight:600;}
+  .doc-title{
+    text-align:center;font-size:30px;font-weight:800;letter-spacing:.6em;
+    color:var(--blue-d);margin:30px 0 14px;padding-left:.6em;
+  }
+  .subtitle{text-align:center;font-size:17px;font-weight:600;color:var(--ink);margin:0 auto 16px;max-width:640px;line-height:1.7;}
+  .doc-date{text-align:center;color:var(--muted);font-size:15px;margin-bottom:8px;}
+
+  h2.sec{
+    font-size:20px;font-weight:800;color:#fff;
+    background:linear-gradient(90deg,var(--blue),var(--blue-l));
+    padding:9px 16px;border-radius:6px;margin:34px 0 16px;
+    letter-spacing:.04em;
+  }
+  h3.sub{font-size:17px;font-weight:700;color:var(--blue-d);margin:22px 0 10px;border-left:5px solid var(--accent);padding-left:10px;}
+  h4.rec{font-size:16.5px;font-weight:700;color:var(--ink);margin:20px 0 8px;background:#eef6fb;border:1px solid #d4e6f3;border-left:5px solid var(--blue);padding:8px 12px;border-radius:4px;}
+  p{margin:0 0 14px;text-align:justify;}
+  .note{color:var(--muted);font-size:14.5px;background:#f6f9fc;border:1px dashed var(--line);padding:12px 14px;border-radius:6px;}
+  ul.plain{margin:0 0 14px;padding-left:1.4em;}
+  ul.plain li{margin:6px 0;}
+  ol.cn{list-style:none;counter-reset:none;margin:0 0 14px;padding:0;}
+  ol.cn li{margin:8px 0;padding-left:0;}
+
+  /* ---------- 表格 ---------- */
+  .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 0 16px;}
+  table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:520px;}
+  table th,table td{border:1px solid var(--line);padding:9px 11px;vertical-align:top;text-align:left;}
+  table thead th{background:var(--blue);color:#fff;font-weight:700;white-space:nowrap;}
+  table tbody th{background:#eef6fb;color:var(--blue-d);font-weight:700;white-space:nowrap;}
+  table tbody tr:nth-child(even) td{background:#f7fafd;}
+  .hl td:first-child,.hl th:first-child{color:#b3261e;}
+
+  /* ---------- 表單（壹、陳情人基本資料） ---------- */
+  .form-table{font-size:15.5px;}
+  .form-table th{width:170px;background:#eef6fb;color:var(--blue-d);font-weight:700;white-space:nowrap;}
+  .field{
+    width:100%;border:0;border-bottom:1.5px solid var(--line);
+    background:transparent;font-family:inherit;font-size:15.5px;color:var(--ink);
+    padding:6px 4px;line-height:1.6;
+  }
+  .field:focus{outline:none;border-bottom-color:var(--accent);background:#f4fbfd;}
+  textarea.field{resize:vertical;min-height:42px;border:1px solid var(--line);border-radius:6px;}
+  .ident{display:flex;flex-wrap:wrap;gap:8px 18px;padding:4px 0;}
+  .chk{display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none;font-size:15.5px;}
+  .chk input{position:absolute;opacity:0;width:0;height:0;}
+  .chk .box{
+    width:19px;height:19px;border:1.6px solid var(--blue);border-radius:4px;
+    display:inline-flex;align-items:center;justify-content:center;
+    color:#fff;font-size:13px;line-height:1;background:#fff;flex:0 0 auto;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact;
+  }
+  .chk input:checked + .box{background:var(--blue);border-color:var(--blue);}
+  .chk input:checked + .box::after{content:"✓";}
+  .chk input:focus-visible + .box{outline:2px solid var(--accent);outline-offset:2px;}
+  .inline-in{
+    border:0;border-bottom:1.5px solid var(--blue);background:transparent;
+    font-family:inherit;font-size:inherit;color:var(--ink);text-align:center;
+    width:64px;padding:1px 2px;
+  }
+  .inline-in:focus{outline:none;background:#f4fbfd;}
+
+  /* ---------- 簽名 ---------- */
+  .sign{margin-top:36px;padding-top:18px;border-top:2px solid var(--line);}
+  .sign-row{display:flex;flex-wrap:wrap;gap:18px 28px;align-items:flex-end;}
+  .sign-item{display:flex;align-items:flex-end;gap:8px;}
+  .sign-item label{font-weight:600;color:var(--ink);white-space:nowrap;}
+  .sign-line{border-bottom:1.5px solid var(--ink);min-width:180px;}
+  .sign-line input{border:0;background:transparent;font-family:inherit;font-size:16px;width:100%;padding:4px 2px;}
+  .sign-line input:focus{outline:none;}
+  .appendix{font-size:14.5px;color:var(--muted);}
+
+  .footer-note{max-width:900px;margin:0 auto 40px;padding:0 16px;color:var(--muted);font-size:13px;text-align:center;}
+  .footer-note a{color:var(--blue-l);}
+
+  /* ---------- RWD 手機版 ---------- */
+  @media (max-width:680px){
+    body{font-size:15px;}
+    .doc{padding:26px 18px;margin:14px 10px 44px;border-radius:6px;}
+    .doc-title{font-size:23px;letter-spacing:.4em;padding-left:.4em;}
+    .subtitle{font-size:15px;}
+    h2.sec{font-size:17px;}
+    h3.sub{font-size:15.5px;}
+    h4.rec{font-size:15px;}
+    .toolbar-inner{padding:8px 12px;}
+    .brand{flex-basis:100%;margin:0 0 2px;font-size:13.5px;}
+    .btn{flex:1;justify-content:center;padding:11px 10px;font-size:14.5px;}
+    .form-table th{width:108px;font-size:14px;}
+    table{font-size:13.5px;}
+  }
+
+  /* ---------- 列印 / 產生 PDF ---------- */
+  @media print{
+    @page{size:A4;margin:16mm 14mm;}
+    body{background:#fff;font-size:12pt;line-height:1.7;}
+    .toolbar,.footer-note{display:none !important;}
+    .doc{max-width:none;margin:0;padding:0;border:0;box-shadow:none;border-radius:0;}
+    h2.sec{background:var(--blue) !important;color:#fff !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;break-after:avoid;}
+    h3.sub,h4.rec{break-after:avoid;}
+    table,.tbl-wrap{break-inside:avoid;}
+    thead th{background:var(--blue) !important;color:#fff !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    tbody th{background:#eef6fb !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .field,.inline-in,.sign-line input{border-bottom:1px solid #333;}
+    .tbl-wrap{overflow:visible;}
+    table{min-width:0;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== 工具列 ===================== -->
+<div class="toolbar">
+  <div class="toolbar-inner">
+    <div class="brand">藍色海洋政策 <span>·</span> 陳情書</div>
+    <button class="btn btn-primary" id="btnPdf" type="button">🖨️ 一鍵產生 PDF 陳情書</button>
+    <button class="btn btn-ghost" id="btnMail" type="button">✉️ 以郵件寄送</button>
+  </div>
+</div>
+
+<!-- ===================== 文件本體 ===================== -->
+<main class="doc" id="doc">
+
+  <div class="recv">
+    受文機關：<b>新北市政府農業局漁業及漁港事業管理處</b><br>
+    地址：新北市板橋區中山路一段 143 號 5 樓　電子郵件：AR6185@ntpc.gov.tw　電話：02-89526055 分機 132
+  </div>
+
+  <h1 class="doc-title">陳　情　書</h1>
+  <p class="subtitle">關於「新北市貢寮、萬里、瑞芳水產動植物繁殖保育區及有關限制事項」公告草案之意見陳述</p>
+  <p class="doc-date">中華民國 115 年
+    <input class="inline-in" type="text" id="hdrMonth" inputmode="numeric" aria-label="月"> 月
+    <input class="inline-in" type="text" id="hdrDay" inputmode="numeric" aria-label="日"> 日
+  </p>
+
+  <!-- 壹 -->
+  <h2 class="sec">壹、陳情人基本資料</h2>
+  <div class="tbl-wrap">
+    <table class="form-table">
+      <tbody>
+        <tr><th>陳情人姓名<br>（代表人請填寫）</th><td><input class="field" type="text" id="fName" autocomplete="name"></td></tr>
+        <tr><th>聯絡電話</th><td><input class="field" type="tel" id="fPhone" autocomplete="tel"></td></tr>
+        <tr><th>電子郵件</th><td><input class="field" type="email" id="fEmail" autocomplete="email"></td></tr>
+        <tr><th>通訊地址</th><td><input class="field" type="text" id="fAddr" autocomplete="street-address"></td></tr>
+        <tr><th>身　分</th><td>
+          <div class="ident" id="identGroup">
+            <label class="chk"><input type="checkbox" value="漁民"><span class="box"></span>漁民</label>
+            <label class="chk"><input type="checkbox" value="休閒釣魚者"><span class="box"></span>休閒釣魚者</label>
+            <label class="chk"><input type="checkbox" value="潛水愛好者"><span class="box"></span>潛水愛好者</label>
+            <label class="chk"><input type="checkbox" value="海洋保育關注者"><span class="box"></span>海洋保育關注者</label>
+            <label class="chk"><input type="checkbox" value="其他"><span class="box"></span>其他</label>
+          </div>
+        </td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 貳 -->
+  <h2 class="sec">貳、主旨及說明</h2>
+  <p>陳情人等針對新北市政府於民國 115 年 6 月 17 日（新北府農漁字第 1152538607 號）預告訂定之貢寮、萬里、瑞芳三個水產動植物繁殖保育區草案，依行政程序法第 154 條第 1 項規定，於意見陳述期間提出下列書面意見。</p>
+  <p>陳情人等完全支持本草案之保育方向，並認知其所欲解決的核心問題——以 SCUBA 射魚（背氣瓶持魚槍或魚叉）大量採捕，以及採捕後公然在市場及網路高調販售，對北海岸珊瑚礁生態造成嚴重破壞，引發廣大守法民眾之強烈反感。</p>
+  <p>然而，有效的保育政策應「精準打擊真正的破壞者」，而非「一律限制所有人」。本草案現行對三個保育區廣大「資源永續利用保育區」之管制，存在「齊頭式禁止、不分行為性質輕重」的問題，使得危害程度截然不同的行為受到相同罰則，對重大違規者嚇阻不足，對守法休閒採捕者限制過嚴。陳情人等建議：以「行為性質」為基礎建立分級管制，對商業採捕販售及 SCUBA 射魚重罰，對守法休閒採捕改採總量管制。</p>
+
+  <!-- 參 -->
+  <h2 class="sec">參、三區保育層級結構說明</h2>
+  <p>三個保育區在設計上有重要差異，以下為各區層級之結構對照：</p>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>層級</th><th>貢寮</th><th>萬里</th><th>瑞芳</th></tr></thead>
+      <tbody>
+        <tr>
+          <th>最嚴格保護</th>
+          <td>核心保育區<br>福連里至洋寮鼻扇形海域 300 公尺</td>
+          <td>核心保育區<br>野柳地質公園連線內（範圍極小）</td>
+          <td>核心保育區<br>深澳昭明宮至深澳漁港北堤 580 公尺</td>
+        </tr>
+        <tr>
+          <th>中度管制<br>（物種保護、禁漁期）</th>
+          <td>核心保育區（同上層級）</td>
+          <td>緩衝保育區<br>（範圍與貢寮、瑞芳核心保育區相當）</td>
+          <td>核心保育區（同上層級）</td>
+        </tr>
+        <tr>
+          <th>□ 廣域管制<br>魚槍＋潛水器禁止<br>影響人數最多</th>
+          <td>永續利用保育區<br>鼻頭角至宜蘭縣界 高潮線外 3 浬</td>
+          <td>永續利用保育區<br>萬里金山邊界至基隆市界 高潮線外 3 浬</td>
+          <td>永續利用保育區<br>基隆市界至鼻頭角燈塔 高潮線外 3 浬</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">說明：萬里核心保育區範圍極小，針對野柳附近特定敏感海域，全面禁捕具合理性。萬里緩衝保育區之範圍與限制內容，與貢寮、瑞芳之核心保育區相當。三區共通之核心關切，在於最廣大的「資源永續利用保育區」之管制分級問題。</p>
+
+  <!-- 肆 -->
+  <h2 class="sec">肆、草案疑慮：資源永續利用保育區缺乏行為性質分級</h2>
+  <h3 class="sub">一、三區均以相同條文全面禁止，未依危害程度區分</h3>
+  <p>貢寮、萬里、瑞芳三個保育區之「資源永續利用保育區」（面積最廣、影響人數最多），均以相同措辭禁止魚槍（含魚叉，依草案定義包含一切刺擊及發射器具）及潛水器，並對所有違規行為適用相同罰鍰區間（NT$3 萬至 15 萬）。然而，同樣是使用魚槍採捕，危害程度有根本性差異：</p>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>採捕方式</th><th>生態危害</th><th>建議管制</th></tr></thead>
+      <tbody>
+        <tr><th>SCUBA 射魚<br>（背氣瓶持任何型式魚槍或魚叉）</th><td>極高——效率等同商業捕撈，消除魚類深水避難所</td><td>維持禁止＋大幅加重罰則，沒入全套裝備</td></tr>
+        <tr><th>商業性採捕後販售<br>（不論採捕工具）</th><td>高——以營利驅動長期大量採捕</td><td>明定加重罰則＋沒入漁獲，吊銷執照＋移送追訴</td></tr>
+        <tr><th>閉氣自由潛水持魚槍<br>（非商業、自用）</th><td>低——受體能限制，傳統漁法</td><td>改採每人每日總量管制，取代全面禁止</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>對 SCUBA 射魚及商業採捕販售者，現行罰則遠低於其不法獲利，缺乏有效嚇阻；對危害相對有限的閉氣自由潛水傳統漁法，全面禁止則超過保育目的之必要程度，有違憲法第 23 條比例原則之必要性要求。</p>
+
+  <h3 class="sub">二、商業採捕與守法休閒採捕之本質差異</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>面向</th><th>守法休閒採捕</th><th>商業採捕濫捕（違規販售）</th></tr></thead>
+      <tbody>
+        <tr><th>目的</th><td>自用、興趣、傳統漁文化</td><td>以營利最大化採捕量</td></tr>
+        <tr><th>頻率數量</th><td>偶發性、少量，受體能自然限制</td><td>長期、大量、系統性採捕</td></tr>
+        <tr><th>採捕方式</th><td>釣具、閉氣潛水、傳統漁法</td><td>SCUBA 射魚、高效率漁具</td></tr>
+        <tr><th>漁獲流向</th><td>自食或家庭分享，不進入市場</td><td>流向市場、餐廳、網路高調販售</td></tr>
+        <tr><th>生態衝擊</th><td>低度、局部、可承受</td><td>高度、持續性、難以回復</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 伍 -->
+  <h2 class="sec">伍、SCUBA 射魚之特殊危害與國際管制</h2>
+  <h3 class="sub">一、SCUBA 射魚為何破壞性遠超傳統漁法</h3>
+  <ul class="plain">
+    <li>可長時間停留水下，系統性清除特定海域魚類族群，效率等同商業捕撈。</li>
+    <li>可下潛至閉氣潛水者無法到達之深水域，消除魚類「深水避難所」之天然保護。</li>
+    <li>精準鎖定體型大、繁殖慢之大型珊瑚礁魚種，造成不可逆之族群結構惡化。</li>
+    <li>裝備成本高昂，行為模式明顯具有商業動機，本質上已與商業捕撈無異。</li>
+  </ul>
+  <h3 class="sub">二、科學研究佐證</h3>
+  <p>PLOS ONE 同儕審查研究（Williams et al., 2014）對馬里亞納群島進行長達 20 年追蹤：禁止 SCUBA 射魚之北馬里亞納群島，其深水域大型珊瑚礁魚類數量及體型，均顯著優於仍允許之關島，研究強烈建議全面禁止。澳洲大堡礁研究（Frisch et al., 2016）亦發現，禁止射魚之保護區其目標魚種恢復效果，明顯優於僅設空間限制之區域。</p>
+  <h3 class="sub">三、國際管制現況</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>國家／地區</th><th>SCUBA 射魚管制</th><th>說明</th></tr></thead>
+      <tbody>
+        <tr><th>歐盟全體會員國</th><td>全面禁止（2019 年起）</td><td>以保育科學為依據立法明確禁止</td></tr>
+        <tr><th>澳洲</th><td>一般禁止，僅限閉氣自由潛水</td><td>多數州不得使用氣瓶輔助</td></tr>
+        <tr><th>北馬里亞納群島</th><td>全面禁止（2003 年起）</td><td>禁後與關島比較，魚類族群顯著恢復</td></tr>
+        <tr><th>印尼（峇里等）</th><td>全面禁止</td><td>敏感棲地違者重罰</td></tr>
+        <tr><th>墨西哥</th><td>全面禁止 SCUBA 射魚</td><td>違者重罰含拘禁，僅允許閉氣漁具</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>禁止 SCUBA 射魚已是全球保育主流。本草案禁止方向正確，但現行罰則上限 15 萬元遠低於國際標準，且與危害較低之閉氣潛水適用相同罰則，應予區別並大幅提高。</p>
+
+  <!-- 陸 -->
+  <h2 class="sec">陸、具體建議事項</h2>
+
+  <h4 class="rec">建議一：大幅加重 SCUBA 射魚罰則，獨立列為加重違規（適用三區）</h4>
+  <ol class="cn">
+    <li>（一）「背負式氣瓶輔助潛水持魚槍（含魚叉）採捕者，不論保育區層級，一律處 NT$15 萬元以上 60 萬元以下罰鍰，並沒入全套採捕裝備（含氣瓶、調節器、魚槍及漁獲物）。」</li>
+    <li>（二）「三年內累犯者，廢止採捕資格，移送司法機關追訴。」</li>
+    <li>（三）建議於公告說明中引用國際科學研究及各國禁止案例，說明 SCUBA 射魚之特殊危害性。</li>
+  </ol>
+
+  <h4 class="rec">建議二：建立罰則分級制度，大幅加重商業採捕販售罰則（適用三區）</h4>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>違規類型</th><th>建議罰鍰</th><th>加重條件</th><th>附加處分</th><th>執法重點</th></tr></thead>
+      <tbody>
+        <tr><th>輕微違規（初犯、自用）</th><td>NT$3 萬～5 萬</td><td>無</td><td>告誡紀錄</td><td>宣導為主</td></tr>
+        <tr><th>一般違規（禁漁期、禁止物種）</th><td>NT$5 萬～10 萬</td><td>再犯加倍</td><td>漁具沒入</td><td>積極稽查</td></tr>
+        <tr class="hl"><th>商業採捕販售</th><td>NT$15 萬～60 萬</td><td>累犯加三倍</td><td>沒入＋吊照</td><td>優先查處</td></tr>
+        <tr class="hl"><th>SCUBA 射魚（背氣瓶持魚槍或魚叉）</th><td>NT$15 萬～60 萬</td><td>一律從重</td><td>沒入全套裝備</td><td>零容忍</td></tr>
+        <tr><th>拒不配合稽查</th><td>另加 NT$5 萬</td><td>無</td><td>移送司法</td><td>即時處理</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>並建議新增：「於保育區內採捕水產動植物供商業販售者，罰鍰加重至二倍；累犯者廢止採捕資格並移送司法機關追訴。」</p>
+
+  <h4 class="rec">建議三：修訂資源永續利用保育區魚槍禁止——依行為性質差異化管制（適用三區）</h4>
+  <ol class="cn">
+    <li>（一）【SCUBA 射魚】維持禁止並大幅加重罰則（見建議一）。</li>
+    <li>（二）【閉氣自由潛水持魚槍，非商業自用】改採每人每日採捕量上限之總量管制（依物種訂定），並明定漁獲不得販售；以精準管制取代全面禁止，符合憲法第 23 條比例原則。</li>
+  </ol>
+
+  <h4 class="rec">建議四：建立休閒採捕與商業採捕之明確區別管制（適用三區）</h4>
+  <ol class="cn">
+    <li>（一）明定休閒採捕所得不得販售；餐廳、魚販及中盤商不得收購來源不明之休閒漁獲，違者按收購金額計算罰鍰，並得撤銷業者執照。</li>
+    <li>（二）網路平台（含社群媒體、拍賣網站）不得刊登違法漁獲交易資訊；主管機關得通知平台業者強制下架。</li>
+    <li>（三）建立重點物種（九孔、龍蝦、海膽等）採捕量上限，以科學化總量管制維護資源永續。</li>
+  </ol>
+
+  <h4 class="rec">建議五：公開違規者資訊、明訂裁量基準、召開公聽會</h4>
+  <ol class="cn">
+    <li>（一）違規者姓名、違規事實及處分結果，應於新北市政府農業局官方網站公開至少一年；收購違法漁獲之業者，應副知市場主管機關列管。</li>
+    <li>（二）另訂「罰鍰裁量基準表」，明定依違規種類、採捕數量、是否初犯、是否商業販售、是否 SCUBA 等因素對應之具體罰鍰，確保執法一致性。</li>
+    <li>（三）公開三個保育區之物種資源量調查資料及科學依據，並召開公聽會廣納各界意見，公開意見回應。</li>
+  </ol>
+
+  <!-- 柒 -->
+  <h2 class="sec">柒、結語</h2>
+  <p>陳情人等支持本草案對 SCUBA 射魚及魚槍採捕之禁止方向。就三區保育層級而言，萬里核心保育區因範圍極小且生態敏感，全面禁捕具合理性；三個中度管制區（貢寮核心區、萬里緩衝區、瑞芳核心區）之物種保護及禁漁期規定亦屬合理。然而，對三區廣大「資源永續利用保育區」採取齊頭式禁止，未依行為性質分級，是現行草案最需要調整之處：對 SCUBA 射魚及商業採捕販售罰則不足，對守法休閒採捕限制過嚴，兩者均與比例原則有所牴觸。</p>
+  <p>建議以行為性質為基礎建立分級管制，對高破壞性行為從重處罰，對守法休閒採捕改採總量管制，並從流通端阻斷非法漁獲進入市場，使有限的執法資源集中於真正造成生態損害的行為，凝聚最廣泛的社會共識，共同守護北海岸珍貴的海洋資源。</p>
+
+  <p class="appendix"><b>附：法律依據</b><br>憲法第 7 條（平等原則）、第 15 條（工作權、財產權）、第 23 條（比例原則）；漁業法第 44、45、65 條；行政程序法第 7 條（比例原則）、第 154 條（意見陳述）；行政罰法第 18 條（罰鍰裁量）。</p>
+  <p class="appendix"><b>附：主要科學文獻</b><br>Williams et al. (2014) PLOS ONE 9(3):e92628；Walsh (2014) Hawaii DLNR Background Paper；Frisch et al. (2016) Biological Conservation；Conservation Evidence Journal (2022) systematic review on spearfishing.</p>
+
+  <!-- 簽名 -->
+  <div class="sign">
+    <div class="sign-row">
+      <div class="sign-item">
+        <label>陳情人代表簽名</label>
+        <span class="sign-line"><input type="text" id="sName" aria-label="陳情人代表簽名"></span>
+      </div>
+      <div class="sign-item">
+        <label>日期：中華民國 115 年</label>
+        <span class="sign-line" style="min-width:54px"><input type="text" id="sMonth" inputmode="numeric" aria-label="月" style="text-align:center"></span>
+        <label>月</label>
+        <span class="sign-line" style="min-width:54px"><input type="text" id="sDay" inputmode="numeric" aria-label="日" style="text-align:center"></span>
+        <label>日</label>
+      </div>
+    </div>
+    <p class="appendix" style="margin-top:16px">（如有多位聯署人，請另附聯署名冊，格式：姓名、聯絡電話、身分、簽名）</p>
+  </div>
+
+</main>
+
+<p class="footer-note">
+  本頁內容依「陳情書」原文逐字製作，供線上填寫與一鍵產生 PDF 之用。<br>
+  受文機關：新北市政府農業局漁業及漁港事業管理處（AR6185@ntpc.gov.tw）
+</p>
+
+<script>
+(function(){
+  "use strict";
+
+  // 一鍵產生 PDF：呼叫瀏覽器列印 → 另存為 PDF（中文字完整保留）
+  document.getElementById("btnPdf").addEventListener("click", function(){
+    window.print();
+  });
+
+  // 以郵件寄送：呼叫使用者本機內定的郵件服務（mailto）
+  document.getElementById("btnMail").addEventListener("click", function(){
+    var val = function(id){ var el=document.getElementById(id); return el ? el.value.trim() : ""; };
+    var idents = Array.prototype.slice
+      .call(document.querySelectorAll("#identGroup input:checked"))
+      .map(function(c){ return c.value; });
+
+    var to = "AR6185@ntpc.gov.tw";
+    var subject = "陳情書：關於「新北市貢寮、萬里、瑞芳水產動植物繁殖保育區及有關限制事項」公告草案之意見陳述";
+
+    var lines = [
+      "受文機關：新北市政府農業局漁業及漁港事業管理處",
+      "",
+      "壹、陳情人基本資料",
+      "陳情人姓名（代表人）：" + val("fName"),
+      "聯絡電話：" + val("fPhone"),
+      "電子郵件：" + val("fEmail"),
+      "通訊地址：" + val("fAddr"),
+      "身　分：" + (idents.length ? idents.join("、") : ""),
+      "",
+      "（陳情書全文請參閱所附之 PDF 陳情書，並請於送出前以「一鍵產生 PDF 陳情書」按鈕產生 PDF 後附加於本郵件。）",
+      "",
+      "陳情人代表簽名：" + val("sName"),
+      "日期：中華民國 115 年 " + val("sMonth") + " 月 " + val("sDay") + " 日"
+    ];
+
+    var body = lines.join("\r\n");
+    var href = "mailto:" + encodeURIComponent(to)
+      + "?subject=" + encodeURIComponent(subject)
+      + "&body=" + encodeURIComponent(body);
+    window.location.href = href;
+  });
+})();
+</script>
+</body>
+</html>
