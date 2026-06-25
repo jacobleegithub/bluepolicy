@@ -412,7 +412,7 @@
 </div>
 
 <p class="footer-note">
-  本頁內容依「陳情書」原文逐字製作，供線上填寫與一鍵產生 PDF 之用。<br>
+  本頁內容依「陳情書」製作，供線上填寫完成後寄出或者產生 PDF（自行附檔寄出）之用途。<br>
   受文機關：新北市政府農業局漁業及漁港事業管理處（AR6185@ntpc.gov.tw）
 </p>
 
@@ -462,25 +462,68 @@
       .map(function(c){ return c.value; });
   }
 
-  // 純文字摘要（信件 text 版本）
+  // 收合 ASCII 空白與換行（保留全形空白，如「身　分」「陳　情　書」）
+  function squash(s){ return s.replace(/[ \t\r\n\f]+/g, " "); }
+
+  // 取得儲存格純文字：先把 <br> 換成空白（單行列格式），再收合空白
+  function cellText(cell){
+    var c = cell.cloneNode(true);
+    Array.prototype.forEach.call(c.querySelectorAll("br"), function(br){
+      br.parentNode.replaceChild(document.createTextNode(" "), br);
+    });
+    return squash(c.textContent || "").trim();
+  }
+
+  // 表格 → 純文字（每列各欄以全形分隔線連接）
+  function tableToText(table){
+    return Array.prototype.map.call(table.querySelectorAll("tr"), function(tr){
+      return Array.prototype.map.call(tr.querySelectorAll("th, td"), cellText).join("｜");
+    }).join("\n");
+  }
+
+  // 完整陳情書純文字版（信件 text/plain 後備）：直接由文件本體序列化，與畫面逐字一致；
+  // 表單值帶入、表格轉為可讀文字。不支援 HTML 的客戶端會顯示此版。
   function buildText(){
-    var idents = getIdents();
-    return [
-      "受文機關：新北市政府農業局漁業及漁港事業管理處",
-      "",
-      "壹、陳情人基本資料",
-      "陳情人姓名（代表人）：" + val("fName"),
-      "聯絡電話：" + val("fPhone"),
-      "電子郵件：" + val("fEmail"),
-      "通訊地址：" + val("fAddr"),
-      "居住縣市：" + val("fCity"),
-      "身　分：" + (idents.length ? idents.join("、") : ""),
-      "",
-      "（以下為陳情書全文，HTML 版本另含完整表格內容。）",
-      "",
-      "陳情人代表簽名：" + val("sName"),
-      "日期：中華民國 115 年 " + val("sMonth") + " 月 " + val("sDay") + " 日"
-    ].join("\n");
+    var src = document.getElementById("doc");
+    var clone = src.cloneNode(true);
+
+    // 1) 表單控制項換成填寫值
+    var oF = src.querySelectorAll("input, textarea, select");
+    var cF = clone.querySelectorAll("input, textarea, select");
+    Array.prototype.forEach.call(oF, function(o, i){
+      var c = cF[i];
+      if (!c || !c.parentNode) return;
+      if (o.type === "checkbox"){
+        var box = c.nextElementSibling;
+        if (box && box.className && box.className.indexOf("box") > -1) box.parentNode.removeChild(box);
+        c.parentNode.replaceChild(document.createTextNode(o.checked ? "■" : "□"), c);
+      } else {
+        c.parentNode.replaceChild(document.createTextNode(o.value || "＿＿＿＿"), c);
+      }
+    });
+
+    // 2) 遞迴序列化；文字節點收合空白、<br> 與區塊元素換行、表格另外處理
+    var out = [];
+    (function walk(node){
+      for (var n = node.firstChild; n; n = n.nextSibling){
+        if (n.nodeType === 3){ out.push(squash(n.nodeValue)); continue; }
+        if (n.nodeType !== 1) continue;
+        var tag = n.tagName;
+        if (tag === "TABLE"){ out.push("\n" + tableToText(n) + "\n"); continue; }
+        if (tag === "BR"){ out.push("\n"); continue; }
+        var block = /^(H1|H2|H3|H4|P|LI|TR|DIV)$/.test(tag);
+        if (tag === "H2") out.push("\n");
+        walk(n);
+        if (block) out.push("\n");
+      }
+    })(clone);
+
+    var body = out.join("")
+      .replace(/[ \t]+$/gm, "")
+      .replace(/^[ \t]+/gm, "")
+      .replace(/\n{3,}/g, "\n\n")
+      .replace(/^\s+|\s+$/g, "");
+    return body + "\n";
   }
 
   // 將整份文件（含填寫值）轉為信件 HTML，逐字呈現陳情書全文
