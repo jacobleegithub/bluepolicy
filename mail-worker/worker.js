@@ -74,6 +74,15 @@ export default {
       return json({ error: "內容過長" }, 413, cors);
     }
 
+    // ===== 防濫用 =====
+    const ip = request.headers.get("CF-Connecting-IP") || "";
+    // 1) 速率限制（KV，便宜，先擋；保護機關信箱與 Resend 額度）
+    const limited = await checkRateLimit(env, ip);
+    if (limited) return json({ error: limited }, 429, cors);
+    // 2) Turnstile 人機驗證（fail closed：未設定 secret 或驗證未過一律拒絕）
+    const tsOk = await verifyTurnstile(env, (data.turnstileToken || "").toString(), ip);
+    if (!tsOk) return json({ error: "人機驗證未通過，請重新整理頁面後再試。" }, 403, cors);
+
     // 收件人固定由後端決定（避免被當成任意轉發的開放中繼）
     const to = env.MAIL_TO || DEFAULT_TO;
     // 寄件地址固定在已驗證網域，但顯示名稱帶入陳情人姓名
@@ -119,6 +128,50 @@ export default {
     return json({ ok: true, id }, 200, cors);
   },
 };
+
+// 向 Cloudflare Turnstile 驗證前端送來的 token；任何失敗皆回 false（fail closed）
+async function verifyTurnstile(env, token, ip) {
+  if (!env.TURNSTILE_SECRET) return false; // 未設定 secret → 一律拒絕
+  if (!token) return false;
+  try {
+    const form = new FormData();
+    form.append("secret", env.TURNSTILE_SECRET);
+    form.append("response", token);
+    if (ip) form.append("remoteip", ip);
+    const r = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      body: form,
+    });
+    const d = await r.json();
+    return d && d.success === true;
+  } catch {
+    return false;
+  }
+}
+
+// 速率限制（以現有 KV 實作）：單一 IP 每小時上限 + 全域每日上限。
+// 回傳錯誤訊息字串表示超限；null 表示放行。KV 失敗時不阻擋正常寄信。
+async function checkRateLimit(env, ip) {
+  if (!env.STATS) return null;
+  const ipMax = parseInt(env.RL_IP_MAX, 10) || 10;     // 每 IP / 小時
+  const dayMax = parseInt(env.RL_DAY_MAX, 10) || 1000;  // 全域 / 日
+  try {
+    if (ip) {
+      const k = "rl:ip:" + ip;
+      const n = (parseInt(await env.STATS.get(k), 10) || 0) + 1;
+      if (n > ipMax) return "送出過於頻繁，請稍後再試。";
+      await env.STATS.put(k, String(n), { expirationTtl: 3600 });
+    }
+    const day = new Date().toISOString().slice(0, 10); // YYYY-MM-DD（UTC）
+    const gk = "rl:day:" + day;
+    const g = (parseInt(await env.STATS.get(gk), 10) || 0) + 1;
+    if (g > dayMax) return "今日寄送量已達上限，請明日再試。";
+    await env.STATS.put(gk, String(g), { expirationTtl: 172800 });
+    return null;
+  } catch {
+    return null;
+  }
+}
 
 // 縣市消毒：trim 後僅接受白名單內的值，否則回 null（不計入縣市分布）
 function normalizeCity(raw) {

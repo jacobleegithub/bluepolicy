@@ -9,6 +9,9 @@ MAIL_TO = "AR6185@ntpc.gov.tw"
 MAIL_FROM = "陳情書系統 <no-reply@dev.eponym.online>"
 # 允許的前端來源（逗號分隔）。預設已含 GitHub Pages 與本機
 ALLOW_ORIGINS = "https://bluepolicy.eponym.online,http://bluepolicy.eponym.online,https://jacobleegithub.github.io,http://localhost:8080,http://127.0.0.1:8080"
+# 防濫用速率限制（可調）：單一 IP 每小時上限、全域每日上限
+RL_IP_MAX = "10"
+RL_DAY_MAX = "1000"
 
 # 統計用 KV（只存彙總數字：總份數與各縣市計數，無個資）
 [[kv_namespaces]]

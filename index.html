@@ -139,6 +139,8 @@
   .sign-line input{border:0;background:transparent;font-family:inherit;font-size:16px;width:100%;padding:4px 2px;}
   .sign-line input:focus{outline:none;}
   .appendix{font-size:14.5px;color:var(--muted);}
+  .verify-box{max-width:920px;margin:24px auto 0;padding:0 22px;display:flex;flex-direction:column;align-items:center;gap:10px;}
+  .verify-label{font-size:14px;color:var(--muted);margin:0;text-align:center;}
 
   .footer-note{max-width:900px;margin:0 auto 40px;padding:0 16px;color:var(--muted);font-size:13px;text-align:center;}
   .footer-note a{color:var(--blue-l);}
@@ -175,6 +177,7 @@
     table{min-width:0;}
   }
 </style>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
 
@@ -403,6 +406,11 @@
 
 </main>
 
+<div class="verify-box">
+  <p class="verify-label">送出前請完成人機驗證（防止「以郵件寄送」被濫用）</p>
+  <div class="cf-turnstile" data-sitekey="0x4AAAAAADq8WrsYNASEXC05" data-language="zh-tw"></div>
+</div>
+
 <p class="footer-note">
   本頁內容依「陳情書」原文逐字製作，供線上填寫與一鍵產生 PDF 之用。<br>
   受文機關：新北市政府農業局漁業及漁港事業管理處（AR6185@ntpc.gov.tw）
@@ -533,10 +541,21 @@
     if (!email || email.indexOf("@") < 1){ setStatus("請先填寫正確的「電子郵件」（作為回信地址）。", "err"); document.getElementById("fEmail").focus(); return; }
     if (!val("fCity")){ setStatus("請先選擇「居住縣市」。", "err"); document.getElementById("fCity").focus(); return; }
 
+    // 人機驗證 token（Turnstile 完成後會注入隱藏欄位 cf-turnstile-response）
+    var tsEl = document.querySelector('[name="cf-turnstile-response"]');
+    var tsToken = tsEl ? tsEl.value : "";
+    if (!tsToken){
+      setStatus("請先完成頁面下方的人機驗證後再送出。", "err");
+      var box = document.querySelector(".verify-box");
+      if (box) box.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+
     var payload = {
       name: val("fName"),
       replyTo: email,
       city: val("fCity"),
+      turnstileToken: tsToken,
       subject: SUBJECT,
       text: buildText(),
       html: buildHtml()
@@ -564,7 +583,11 @@
     .catch(function(err){
       setStatus("✗ 寄送失敗：" + (err && err.message ? err.message : "網路錯誤"), "err");
     })
-    .finally(function(){ btnMail.disabled = false; });
+    .finally(function(){
+      btnMail.disabled = false;
+      // Turnstile token 為一次性，送出後重置以便下次重新驗證
+      if (window.turnstile){ try { turnstile.reset(); } catch(e){} }
+    });
   });
 })();
 </script>
