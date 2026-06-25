@@ -62,7 +62,8 @@ export default {
 
     // 收件人固定由後端決定（避免被當成任意轉發的開放中繼）
     const to = env.MAIL_TO || DEFAULT_TO;
-    const from = env.MAIL_FROM || DEFAULT_FROM;
+    // 寄件地址固定在已驗證網域，但顯示名稱帶入陳情人姓名
+    const from = buildFrom(name, env.MAIL_FROM || DEFAULT_FROM);
 
     const payload = {
       from,
@@ -100,6 +101,24 @@ export default {
     return json({ ok: true, id }, 200, cors);
   },
 };
+
+/**
+ * 以陳情人姓名作為 From 的顯示名稱，地址沿用已驗證網域（Resend 規範：From 網域必須已驗證，
+ * 顯示名稱則可自由設定）。姓名為使用者輸入，需消毒以避免 header 注入。
+ */
+function buildFrom(name, mailFrom) {
+  const m = mailFrom.match(/<([^>]+)>/);
+  const addr = (m ? m[1] : mailFrom).trim();
+  // 去除控制字元（含換行）與引號／反斜線，避免破壞或注入 From 標頭；限制長度
+  const clean = name
+    .replace(/[\u0000-\u001f]+/g, " ")
+    .replace(/["\\]/g, "")
+    .trim()
+    .slice(0, 60);
+  const display = clean ? `${clean}（陳情人）` : "陳情書系統";
+  // 一律加引號，顯示名稱即使含逗號等特殊字元也安全（RFC 5322）
+  return `"${display}" <${addr}>`;
+}
 
 function corsHeaders(origin, allow) {
   const o = allow.includes(origin) ? origin : allow[0];
