@@ -1,0 +1,14 @@
+name = "bluepolicy-mail"
+main = "worker.js"
+compatibility_date = "2024-11-01"
+
+# 收件人 / 寄件人（非機密，可放這裡；亦可改用 secret）
+[vars]
+MAIL_TO = "AR6185@ntpc.gov.tw"
+# 測試階段請保留 onboarding@resend.dev；待 Resend 驗證你的網域後改為自有網域寄件人
+MAIL_FROM = "陳情書系統 <onboarding@resend.dev>"
+# 允許的前端來源（逗號分隔）。預設已含 GitHub Pages 與本機
+ALLOW_ORIGINS = "https://jacobleegithub.github.io,http://localhost:8080,http://127.0.0.1:8080"
+
+# 注意：RESEND_API_KEY 為機密，請勿寫在此檔。
+# 部署時以指令設定：  wrangler secret put RESEND_API_KEY
